@@ -65,9 +65,9 @@ pipeline {
                 dir('Uptime-kuma-main') {
                     script {
                         withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        sh "docker build -t uptime ."
-                        sh "docker tag uptime ghandgevikas/uptime:latest"
-                        sh "docker push ghandgevikas/uptime:latest"
+                            sh "docker build -t uptime ."
+                            sh "docker tag uptime ghandgevikas/uptime:latest"
+                             sh "docker push ghandgevikas/uptime:latest"
                     }
                 }
             }
