@@ -19,13 +19,7 @@ pipeline {
 
         
 
-        stage('Install Dependencies') {
-    steps {
-        dir('uptime-kuma') {
-            sh 'npm install'
-        }
-    }
-}
+        stage('')
 
 
         stage("Quality Gate") {
