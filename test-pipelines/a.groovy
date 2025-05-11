@@ -19,7 +19,11 @@ pipeline {
 
         
 
-        stage('Install Dependecies')
+        stage('Install Dependecies') {
+            steps {
+                
+            }
+        }
 
 
         stage("Quality Gate") {
