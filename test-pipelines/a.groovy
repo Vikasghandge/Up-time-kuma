@@ -17,9 +17,7 @@ pipeline {
             }
         }
 
-        
-
-        stage('Install Dependecies') {
+        stage('Install Dependencies') {
             steps {
                 dir('Uptime-kuma-main') {
                     sh 'npm install'
@@ -27,17 +25,19 @@ pipeline {
             }
         }
 
-        stage("Sonarqube Analysis "){
-            steps{
+        stage('SonarQube Analysis') {
+            steps {
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=uptime \
-                    -Dsonar.projectKey=uptime '''
+                    sh '''
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectName=uptime \
+                        -Dsonar.projectKey=uptime
+                    '''
                 }
             }
         }
 
-
-        stage("Quality Gate") {
+        stage('Quality Gate') {
             steps {
                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
@@ -45,18 +45,11 @@ pipeline {
             }
         }
 
-      //  /*
-      //  stage('OWASP FS SCAN') {
-       //     steps {
-        //        dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-        //        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-         //   }
-       // }
-      //  */
-
-        stage('TRIVY FS SCAN') {
+        stage('Trivy Filesystem Scan') {
             steps {
-                sh "trivy fs . > trivyfs.json"
+                dir('Uptime-kuma-main') {
+                    sh 'trivy fs . > trivyfs.json'
+                }
             }
         }
 
@@ -65,28 +58,25 @@ pipeline {
                 dir('Uptime-kuma-main') {
                     script {
                         withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                            sh "docker build -t uptime ."
-                            sh "docker tag uptime ghandgevikas/uptime:latest"
-                            sh "docker push ghandgevikas/uptime:latest"
+                            sh 'docker build -t uptime .'
+                            sh 'docker tag uptime ghandgevikas/uptime:latest'
+                            sh 'docker push ghandgevikas/uptime:latest'
+                        }
                     }
                 }
             }
         }
 
-                }
+        stage('Trivy Image Scan') {
+            steps {
+                sh 'trivy image ghandgevikas/uptime:latest > trivy.json'
             }
         }
 
-        stage("TRIVY Image Scan") {
+        stage('Remove Container') {
             steps {
-                sh "trivy image ghandgevikas/uptime:latest > trivy.json"
-            }
-        }
-
-        stage("Remove Container") {
-            steps {
-                sh "docker stop uptime || true"
-                sh "docker rm uptime || true"
+                sh 'docker stop uptime || true'
+                sh 'docker rm uptime || true'
             }
         }
 
@@ -96,4 +86,4 @@ pipeline {
             }
         }
     }
-
+}
