@@ -19,15 +19,14 @@ pipeline {
 
         
 
-        stage("Sonarqube Analysis") {
-            steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh '''$SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=uptime \
-                        -Dsonar.projectKey=uptime'''
-                }
-            }
+        stage('Install Dependencies') {
+    steps {
+        dir('uptime-kuma') {
+            sh 'npm install'
         }
+    }
+}
+
 
         stage("Quality Gate") {
             steps {
