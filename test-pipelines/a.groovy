@@ -19,7 +19,6 @@ pipeline {
 
         stage('Install Dependencies') {
             steps { 
-                dir('Uptime-kuma') 
                 sh "npm install"
             }
         }
