@@ -18,10 +18,13 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            steps { 
-                sh "npm install"
-            }
+    steps {
+        dir('uptime-kuma') {
+            sh 'npm install'
         }
+    }
+}
+
 
         stage("Sonarqube Analysis") {
             steps {
