@@ -21,7 +21,7 @@ pipeline {
 
         stage('Install Dependecies') {
             steps {
-                dir()
+                dir('Up')
             }
         }
 
