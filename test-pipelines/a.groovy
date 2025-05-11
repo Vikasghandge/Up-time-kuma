@@ -62,7 +62,7 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                dir()
+                dir('')
             }
         }
 
