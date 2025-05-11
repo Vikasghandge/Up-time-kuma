@@ -62,7 +62,9 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                dir('')
+                dir('Uptime-kuma-main') {
+                    
+                }
             }
         }
 
