@@ -60,7 +60,7 @@ pipeline {
             }
         }
 
-        stage('')
+        stage('Docker Push')
 
         stage("TRIVY Image Scan") {
             steps {
