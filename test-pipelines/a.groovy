@@ -21,7 +21,9 @@ pipeline {
 
         stage('Install Dependecies') {
             steps {
-                dir('Up')
+                dir('Uptime-kuma') {
+                    
+                }
             }
         }
 
